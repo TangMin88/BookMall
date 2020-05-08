@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>确认订单</title>
+        <link rel="stylesheet" type="text/css" href="jingtai/login/css/login.css">
+        <script type="text/javascript" src="jingtai/login/js/jquery.min.js"></script>
+        <script type="text/javascript">
+        $(function(){
+            //确认付款
+            // $(".but").click(function() {
+            //     var state = 0;            
+            //     //设置请求的urt
+            //     var url ="/updatetheorder";
+            //     //设置请求参数
+            //     var param = {"state":state};
+            //     //发送Ajax请求
+            //     $.post(url,param,function(res){
+                
+            //     });                      
+            // });
+
+            $(".cancel").click(function() {
+                return confirm("请问确定取消付款吗？");
+            });
+        });
+        </script>
+    </head>
+    <body text="purple" bgcolor ="silver">
+        <div>
+            <div id="header">
+                <div>                                     
+                    <a href ="/cancellationpayment" >返回</a>
+                </div>                                                        
+            </div> 
+            <div class="main">
+                <span>
+                    <h1 align="center">确认订单</h1> 
+                    <hr size="3px" width="50%" color="green" align="center"/>
+                </span>  
+                <div class="user">
+                   <div> <span>{{.User.Username}}</span> <span>{{.User.Number}}</span> </div>
+                   <div><span>{{.User.Address}}</span></div> 
+                </div>
+                <hr size="3px" width="10%" color="green" align="left"/>
+                {{range .OrderSlice}}
+                <div class="shangp">
+                    <div><span>{{.Shop.ShopName}}</span></div>
+                    {{range .OrderItem}}
+                    <div>
+                        <div><img class="book_img" alt="" src="../{{.ImgPath}}" height="200" width="200"/></div>
+                        <div><span>{{.Title}}</span></div>
+                        <div><span>{{.Author}}</span></div>
+                        <div><span>{{.Price}}</span></div>
+                        <div><span>{{.Count}}</span></div>
+                        <div><span>{{.Amount}}</span></div>
+                        
+                    </div>
+                    {{end}}                    
+                </div>
+                <div >
+                    <span class="car_span">共有<span class="b_count">{{.TotalCount}}</span>件</span>
+                    <span class="car_span">小计<span class="b_amount">{{.TotalAmout}}</span>元</span>       
+                </div>
+                <hr size="3px" width="10%" color="green" align="left"/>
+                {{end}}
+                
+                <div>
+                    <span>合计<span>{{.TotalAmounts}}</span>元</span> 
+                    <span><a href="/updatetheorder?state=0">确认付款</a></span> 
+                    <span><a class="cancel" href="/updatetheorder?state=3">取消</a></span>
+                </div>
+            </div>
+            
+        </div>  
+        
+    </body>
+</html>

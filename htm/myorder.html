@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>我的订单</title>
+        <link rel="stylesheet" type="text/css" href="jingtai/login/css/login.css">
+        <script type="text/javascript" src="jingtai/login/js/jquery.min.js"></script>
+        <script type="text/javascript">
+        $(function(){
+            //确认收货
+            // $(".but3").change(function() {
+            //     //获取订单id
+            //     var orderid = $(this).attr("id");
+            //     //交易完成状态码
+            //     var state = 2;                 
+            //     //发送请求
+            //     location = "/myorderstate?orderid="+orderid+"&state="+state;                                        
+            // });
+            // //确认付款
+            // $(".but1").change(function() {
+            //     //获取订单id
+            //     var orderid = $(this).attr("id");
+            //     //交易完成状态码
+            //     var state = 0;                 
+            //     //发送请求
+            //     location = "/myorderstate?orderid="+orderid+"&state="+state;                                        
+            // });
+
+            //给取消订单的链接绑定单击事件
+            $("#cancel").click(function() {
+                return confirm("请问确定要取消这份订单吗？");
+            });
+
+        });    
+        </script>
+    </head>
+    <body text="purple" bgcolor ="silver">
+        <div>
+            <div id="header">
+                <div><a href="/page">返回</a></div>
+                <span>
+                    <h1 align="center">我的订单</h1> 
+                    <hr size="3px" width="50%" color="green" align="center"/>
+                </span>  
+            </div>
+            <div>
+                <a href="/queryorder">全部订单</a>
+                <a href="/queryorder?state=3">待付款</a>
+                <a href="/queryorder?state=0">待发货</a>
+                <a href="/queryorder?state=1">待收货</a>                             
+            </div>          
+            <div>
+                {{if.Judge}}
+                <table width="1200">                  
+                    <tr>
+                        <td width="150">订单号</td>
+                        <td width="250">时间</td>
+                        <td width="100">总数量</td>
+                        <td width="100">总金额</td>
+                        <td width="100">订单详情</td>
+                        <td width="100"></td>
+                        <td width="100"></td>
+                        <hr size="2px" width="100%" color="green" align="center"/>
+                    </tr>
+                    {{range .Order}}
+                    <tr>
+                        <td width="150">{{.OrderID}}</td>
+                        <td width="250">{{.CreateTime}}</td>
+                        <td width="100">{{.TotalCount}}</td>
+                        <td width="100">{{.TotalAmout}}</td>                   
+                        <td width="100"><a class="but2"}" href="/checkthedetails?orderid={{.OrderID}}">查看详情</a></td>
+                        {{if .NoSend}}
+                        <td width="100"><a href="/">提醒发货</a></td>
+                        <td width="100"><a href="/">退款</a></td>
+                        {{end}}
+                        {{if .SendComplate}}
+                        <td width="100"><a class="but3" href="/myorderstate?orderid={{.OrderID}}&state=2">确认收货</a></td>
+                        <td width="100"></td>
+                        {{end}}
+                        {{if .NotPaying}}
+                        <td width="100"><a class="but1" href="/myorderstate?orderid={{.OrderID}}&state=0">确认付款</a></td>
+                        <td width="100"><a class="cancel" href="/cancellationoforder?orderid={{.OrderID}}">取消订单</a></td>
+                        {{end}}
+                        {{if .TheDeal}}
+                        <td width="100">交易完成</td>
+                        <td width="100"></td>
+                        {{end}} 
+                        <hr size="2px" width="100%" color="green" align="center"/>                                                                         
+                    </tr>                                    
+                    {{end}}
+                </table>             
+                {{else}}
+                <h1>没有订单</h1>
+                {{end}}
+            </div>
+        </div>
+    </body>
+</html>

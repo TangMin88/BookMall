@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>购物车</title>
+    <link rel="stylesheet" type="text/css" href="jingtai/login/css/login.css">
+    <script type="text/javascript" src="jingtai/login/js/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            //给清空购物车的链接绑定单击事件
+            $("#empty").click(function() {
+                return confirm("请问确定要清空购物车吗？");
+            });
+            //给删除购物项的链接绑定单击事件
+            $(".deletecartitm").click(function(){
+            var title = $(this).attr("id");
+                return confirm("请问确定要删除【"+title+"】这本书吗？");
+            }); 
+            //给输入购物项的数量绑定change事件                     
+            $(".updatecount").change(function() {
+                //获取购物项id
+                var cartitmid = $(this).attr("id");
+                //输入的数量
+                var bookcount = $(this).val();                 
+                //发送请求
+                location = "/updateCartItmID?cartitmid="+cartitmid+"&bookcount="+bookcount;                                        
+            });       
+        });
+    </script>
+</head>
+
+<body text="purple" bgcolor ="silver" >
+   
+    <div id="header">
+        
+        <div>
+            <a href="/deletecookie">登出</a>
+            <a href="/page">返回</a>
+        </div>
+    </div>
+
+    <div id="main" style="font-size: xx-large;">
+        {{if .Judge}}
+        <caption>购物车</caption>
+        {{range $i, $v := .Car.CartItms}}
+        <table width="600">  
+             
+            <tr>
+                <td width="150">商品名称</td>
+                <td width="100">数量</td>
+                <td width="100">单价</td>
+                <td width="100">金额</td>
+                <td width="100">操作</td>
+                <hr size="2px" width="100%" color="green" align="center"/>
+            </tr>
+            <span>{{$i}}</span>  
+            {{range $v}}           
+            <tr>
+                <td width="150">{{.Book.Title}}</td>
+                <td width="100">
+                    <input id="{{.CartItmID}}" type="text" class="updatecount" value="{{.Count}}" style="text-align: center;width: 50px;"/>               
+                </td>
+                <td width="100">{{.Book.Price}}</td>
+                <td width="100">{{.Amout}}</td>
+                <td width="100"><a id="{{.Book.Title}}" class="deletecartitm" href="/deleteIDCartItm?cartitmid={{.CartItmID}}">删除</a></td>
+                <hr size="2px" width="100%" color="green" align="center"/>
+            </tr>          
+            {{end}}
+        </table>
+        {{end}}
+
+        <div class="car_info">
+            <span class="car_span">购物车共有<span class="b_count">{{.Car.TotalCount}}</span>件</span>
+            <span class="car_span">总金额<span class="b_amount">{{.Car.TotalAmount}}</span>元</span>
+            <span class="car_span"><a href="/deleteIDCar?carid={{.Car.CarID}}" id="empty">清空购物车</a></span>
+            <span class="car_span"><a href="/tocheckout">去结账</a></span>          
+        </div>
+    
+        {{else}}
+        <h1 style="text-align: center;">你的购物车空空如也，快去<a href="/page" style="color: royalblue;">购物</a>吧</h1> 
+        {{end}}
+       
+    </div>
+</body>
+</html>

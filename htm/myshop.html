@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{.Shop.ShopName}}</title>
+    <link rel="stylesheet" type="text/css" href="jingtai/login/css/login.css">
+    <script type="text/javascript" src="jingtai/login/js/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(function(){
+        
+        });    
+    </script>      
+</head>
+
+<body text="purple"  bgcolor ="silver" >     
+    <div id="header">
+        <span>
+            <h1 align="center">{{.Shop.ShopName}}</h1> 
+            <hr size="3px" width="100%" color="green" align="center"/>
+        </span>
+        
+        <div>
+            <a href="/page">首页</a> 
+            <a href ="/deletecookie">登出</a>         
+            <a href="/myinvoicep">我的货单</a>
+            <a href="/">书籍管理</a>
+            <a href="/">消息</a>
+        </div>
+    </div>
+
+    <div id="main" >     
+        {{range .BooK}}
+        <div id="b_list" style="font-size: x-large;" >
+            <div class="img_div">
+                <img class="book_img" alt="" src="{{.ImgPath}}" height="200" width="200"/>
+            </div>
+            <div class="book">
+                <div class="book_name">
+                    <span class="sp1">书名：</span>
+                    <span class="sp2">{{.Title}}</span>
+                </div>
+                <div class="book_author">
+                    <span class="sp1">作者：</span>
+                    <span class="sp2">{{.Author}}</span>
+                </div>
+                <div class="book_price">
+                    <span class="sp1">价格：</span>
+                    <span class="sp2">{{.Price}}</span>
+                </div>
+                <div class="book_sales">
+                    <span class="sp1">销量：</span>
+                    <span class="sp2">{{.Sales}}</span>
+                </div>
+                <div class="book_stock">
+                    <span class="sp1">库存：</span>
+                    <span class="sp2">{{.Stock}}</span>
+                </div>                
+                </div>
+            </div>     
+        </div>
+        {{end}}    
+     
+        <div id="page_nav">
+            {{if .IsHasPrev}}
+            <a href="/mybookshop">首页</a>
+            <a href="/mybookshop?pageNo={{.PreviousPage}}">上一页</a>
+            {{end}}
+            当前是第{{.PageNo}}页.共{{.TotalPage}}页.共{{.TotalRecord}}条记录
+            {{if .IsHasNext}}
+            <a href="/mybookshop?pageNo={{.NextPage}}">下一页</a>
+            <a href="/mybookshop?pageNo={{.TotalPage}}">末页</a>
+            {{end}}
+            到第<input value="{{.PageNo}}" name="pn" id="pn_input"/>页
+            <input type="button" value="确定" id="sub"/>
+            <script>
+                $("#sub").click(function(){
+                    var PageNo = $("#pn_input").val();
+                    location = "/mybookshop?pageNo="+PageNo
+                });
+            </script>
+        </div>    
+    </div>
+</body>
+</html>
