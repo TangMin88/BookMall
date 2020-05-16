@@ -25,17 +25,17 @@ func GenValidateCode(width int) string {
 //Verification 获取验证码
 func Verification(num string) string {
 	shu := 5
-	code := GenValidateCode(shu)
-
-	client, err := dysmsapi.NewClientWithAccessKey("cn-hangzhou", "LTAI4FhwZpHwHbyK8Ny8ZsDJ", "qrkQzeVX3JsJdvvbAc8vi3KzeEupBc")
+	code := GenValidateCode(shu)/ 生成5位数字验证码功能
+ 	// 下列的accessKeyId以及accessSecret请按实际申请到的填写
+	client, err := dysmsapi.NewClientWithAccessKey("cn-hangzhou", "你的accessKeyId", "你的accessSecret")
 
 	request := dysmsapi.CreateSendSmsRequest()
 	request.Scheme = "https"
 
-	request.PhoneNumbers = num
-	request.SignName = "number"
-	request.TemplateCode = "SMS_185842473"
-	request.TemplateParam = "{\"code\":\"" + code + "\"}"
+	request.PhoneNumbers = num //接收短信的手机号码。
+	request.SignName = "number"//短信签名名称
+	request.TemplateCode = "短信模板ID"
+	request.TemplateParam = "{\"code\":\"" + code + "\"}"//短信模板变量对应的实际值，JSON格式
 
 	response, err := client.SendSms(request)
 	if err != nil {
