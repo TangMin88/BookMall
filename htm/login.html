@@ -32,7 +32,7 @@
 <body>
     <div class="container">
         <div class="wrap">
-            <header><em>Logo</em><span>╳╳╳技术有限公司</span></header>
+           
             <article>
                 <section>
                     <aside>
@@ -40,14 +40,14 @@
                             <img src="../jingtai/login/img/user.png"/>
                         </em>
                         <span class="errorMsg" id="msg">{{.}}</span>
-                         <form action="/Login" method="POST" enctype="application/x-www-form-urlencoded">
+                         <form action="/postlogin" method="POST" enctype="application/x-www-form-urlencoded">
                             <p class="name"><i></i><input type="text" name="userName" class="userName" placeholder="请输入用户名"></p>
                             <p class="password"><i></i><input type="password" name="password" class="pwd" placeholder="请输入密码"></p>
                             <input type="submit" value="登录" />
                             <p class="remember"><input type="checkbox" name="remember">记住密码</p>
                             <p class="passwordBack"><a href="sms.html">密码找回</a></p>
-                            <p class="regist"><a href="../jingtai/regist.html">立即注册</a></p>
-                            <div class="clear"></div>
+                            <p class="regist"><a href="/regist">立即注册</a></p>
+                            
                         </form>
                     </aside>
                    
