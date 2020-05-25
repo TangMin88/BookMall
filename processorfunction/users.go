@@ -1,45 +1,23 @@
 package processorfunction
 
 import (
-	"fmt"
+	//"fmt"
 	"net/http"
 	"page/dao"
 	"page/modal"
 	"text/template"
-	"strconv"
+	//"strconv"
 )
 
-//Page 主页
-func Page(w http.ResponseWriter, r *http.Request) {
-	//获取当前页页码
-	pageNo := r.FormValue("pageNo")
-	if pageNo == ""{
-		pageNo = "1"
-	}
-	//fmt.Println("Page", pageNo)
-	//将页码转为int64
-	ipageNo,_ := strconv.ParseInt(pageNo,10,64)
-	//获取当前页图书
-	page,_ := dao.TotalBook(ipageNo)
-	//fmt.Println("Page", page.PageNo)
-	//判断是否登录
-	session, flag := LadingCookie(r)
-	//fmt.Println("Page", session, flag)
-	if flag {
-		page.Judge = true
-		page.Session = session
-		//判断是否有店铺
-		shop,_ := dao.QueryShop(session.UserID)
-		if shop != nil {
-			page.JudgeShop =true
-		}
-	}	
-	t := template.Must(template.ParseFiles("../page.html"))
-	t.Execute(w, page)
-}
 
-//HomeLogin 去登录
-func HomeLogin(w http.ResponseWriter, r *http.Request) {
+
+//Login 去登录页面
+func Login(w http.ResponseWriter, r *http.Request) {		
+	t := template.Must(template.ParseFiles("../htm/login.html"))
+	t.Execute(w, "")	
+}
+//HomeLogin 提交登录表单
+func PostLogin(w http.ResponseWriter, r *http.Request) {
 	//判断cookie是否存在，避免重复建立cookie
 	_, flag := LadingCookie(r)
 	if flag {
@@ -58,20 +36,24 @@ func HomeLogin(w http.ResponseWriter, r *http.Request) {
 			t := template.Must(template.ParseFiles("../htm/daozhuan.html"))
 			t.Execute(w, username)
 		} else {
-			t := template.Must(template.ParseFiles("../htm/login.html"))
-			t.Execute(w, "用户名或密码错误")
+			Login(w,r)
 		}
 	}
 }
 
-//HomeRegist 去注册
-func HomeRegist(w http.ResponseWriter, r *http.Request) {
+//Regist 注册页面
+func Regist(w http.ResponseWriter, r *http.Request) {
+	t := template.Must(template.ParseFiles("../htm/regist.html"))
+	t.Execute(w, "")
+}
+
+//HomeRegist 提交注册表单
+func PostRegist(w http.ResponseWriter, r *http.Request) {
 	username := r.PostFormValue("userName")
 	password := r.PostFormValue("password")
 	email := r.PostFormValue("email")
 	number := r.PostFormValue("number")
 	address := r.PostFormValue("address")
-	fmt.Println(password)
 	dao.AddUser(username, password, email, number,address)
 	t := template.Must(template.ParseFiles("../htm/login.html"))
 	t.Execute(w, "注册成功，请重新登录")
@@ -79,7 +61,7 @@ func HomeRegist(w http.ResponseWriter, r *http.Request) {
 }
 
 //QueryName 通过Ajax请求验证用户名是否可用
-func QueryName(w http.ResponseWriter, r *http.Request) {
+func PostQueryName(w http.ResponseWriter, r *http.Request) {
 	username := r.PostFormValue("userName")
 	user := dao.QueryUser(username)
 	if user.ID > 0 {
@@ -93,7 +75,7 @@ func QueryName(w http.ResponseWriter, r *http.Request) {
 }
 
 //AcquireNumber 获取验证码
-func AcquireNumber(w http.ResponseWriter, r *http.Request) {
+func PostAcquireNumber(w http.ResponseWriter, r *http.Request) {
 	number := r.PostFormValue("number")
 	//fmt.Println(number)
 	code := modal.Verification(number)
@@ -102,7 +84,7 @@ func AcquireNumber(w http.ResponseWriter, r *http.Request) {
 }
 
 //Shouj 获取手机号
-func Shouj(w http.ResponseWriter, r *http.Request) {
+func PostShouj(w http.ResponseWriter, r *http.Request) {
 	username := r.PostFormValue("userName")
 	user := dao.QueryUser(username)
 	if user.ID > 0 {
@@ -116,7 +98,7 @@ func Shouj(w http.ResponseWriter, r *http.Request) {
 }
 
 //PassWordBack 更新密码
-func PassWordBack(w http.ResponseWriter, r *http.Request) {
+func PostPassWordBack(w http.ResponseWriter, r *http.Request) {
 	username := r.PostFormValue("userName")
 	password := r.PostFormValue("password")
 	//更新用户

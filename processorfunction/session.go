@@ -51,10 +51,19 @@ func LadingCookie(r *http.Request) (*modal.Session, bool) {
 		//fmt.Println("cookieval", uuid)
 		session := dao.QuerySession(uuid)
 		//fmt.Println("session", session)
-		if session.UserID > 0 {
+		if session.SessionID!= "" {			
 			return session, true
 		}
+	}
+	return nil, false
+}
 
+//判断是否有店铺
+func ShopCookie(userID int64) (*modal.Shop, bool) {
+	//判断是否有店铺
+	shop,_ := dao.QueryShop(userID)	
+	if shop.ID > 0  {
+		return shop,true
 	}
 	return nil, false
 }
