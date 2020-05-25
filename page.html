@@ -14,7 +14,7 @@
                 //获取bookid
                var bookId = $(this).attr("id");            
                 //设置请求的urt
-                var url ="/addBookCar";
+                var url ="/postaddBookCar";
                 //设置请求参数
                 var param = {"bookId":bookId};
                 //发送Ajax请求
@@ -43,19 +43,31 @@
             <a href ="/deletecookie" >登出</a>
             <a href="/getCar">购物车</a> 
             <a href="/queryorder">我的订单</a>
-            {{if .JudgeShop}}
-            <a href ="/mybookshop" >我的店铺</a>          
-            {{end}}
             <a href="/">消息</a>
+            {{if.SJudge}}
+            <a href="/mybookshop">我的店铺</a>
+            {{else}}
+            <a href="/owner">成为店主</a>
+            {{end}}
+            
         </div>
         {{else}}
         <div>
-            <a href ="htm/login.html" >登录</a><a href ="jingtai/regist.html" >注册</a>
+            <a href ="/login" >登录</a><a href ="/regist" >注册</a>
         </div>
         {{end}}
+        
     </div>
 
-    <div id="main" >
+    <div id="main">
+        <div id="book">
+        <div class="book_cond">
+            <form action="/pricepage" method="POST">
+                价格：<input type="text" name="min" >元 - <input type="text" name="max" >元 
+                <input type="submit" value="查询" >
+            </form>
+        </div>
+
         <div style="text-align: center;">
             <div>
                 <span id="shou">你刚刚将<span style="color: royalblue;" id="bookmsg"></span>加入到购物车中</span>
@@ -102,7 +114,7 @@
             </div>     
         </div>
         {{end}}    
-     
+        </div>
         <div id="page_nav">
             {{if .IsHasPrev}}
             <a href="/page">首页</a>
@@ -121,7 +133,8 @@
                     location = "/page?pageNo="+PageNo
                 });
             </script>
-        </div>    
+        </div>   
+    
     </div>
 </body>
 </html>
