@@ -2,6 +2,7 @@ package dao
 
 import (
 	"page/modal"
+	
 )
 
 //AddShop 添加店铺
@@ -32,7 +33,7 @@ func QueryShop(userid int64) (*modal.Shop,error){
 	row := Db.QueryRow(sql,userid)
 	shop := &modal.Shop{}
 	err := row.Scan(&shop.ID, &shop.ShopName, &shop.UserID)
-	if err != nil{
+	if err != nil{	
 		return nil,err
 	}
 	return shop,nil

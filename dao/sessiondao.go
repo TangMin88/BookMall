@@ -1,7 +1,9 @@
 package dao
 
-import "page/modal"
-
+import (
+	"page/modal"
+	"fmt"
+)
 //AddSession 向数据库添加session
 func AddSession(sess *modal.Session) error {
 	sql := "insert into session values(?,?,?)"
@@ -27,6 +29,9 @@ func QuerySession(sessionID string) *modal.Session {
 	sql := "select sessionID,user_name,user_ID from session where sessionID=?"
 	row := Db.QueryRow(sql, sessionID)
 	session := &modal.Session{}
-	row.Scan(&session.SessionID, &session.UserName, &session.UserID)
+	err := row.Scan(&session.SessionID, &session.UserName, &session.UserID)
+	if err != nil{
+		fmt.Println(err)
+	}
 	return session
 }

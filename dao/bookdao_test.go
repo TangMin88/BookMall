@@ -10,7 +10,9 @@ func TestBook(t *testing.T) {
 	fmt.Println("测试book中的函数")
 	//t.Run("TotalBook", testTotalBook)
 	//t.Run("tianjia",testAddBook)
-	t.Run("Updatek",testUpdatek)
+	//t.Run("Updatek",testUpdatek)
+	//t.Run("Aa",testAa)
+	
 }
 func testTotalBook(*testing.T) {
 	page,_ := TotalBook(2)
@@ -34,7 +36,4 @@ func testAddBook(*testing.T) {
 	AddBook(book)
 }
 
-func testUpdatek(*testing.T) {
-	img := "jingtai/书籍图片/默认图片.jpeg"
-	Updatek(img)
-}
+

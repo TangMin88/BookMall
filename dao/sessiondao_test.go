@@ -6,17 +6,17 @@ import (
 	"testing"
 )
 
-//func TestSession(t *testing.T) {
+func TestSession(t *testing.T) {
 	//fmt.Println("测试session中的函数")
 	//t.Run("AddSession", testAddSession)
 	//t.Run("DeleteSession", testDeleteSession)
 	//t.Run("QuerySession", testQuerySession)
-//}
+}
 func testAddSession(*testing.T) {
 	sess := &modal.Session{
 		SessionID: "d73a645ce9c42b2941d088",
-		UserName:  "kk",
-		UserID:    6,
+		UserName:  "mili",
+		UserID:    3,
 	}
 	AddSession(sess)
 }
@@ -25,6 +25,7 @@ func testDeleteSession(*testing.T) {
 	DeleteSession(a)
 }
 func testQuerySession(*testing.T) {
-	c := QuerySession("05d73a645ce9c42b2941d088")
+	c := QuerySession("d73a645ce9c42b2941d0888")
 	fmt.Println(c)
+	
 }

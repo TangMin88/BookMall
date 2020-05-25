@@ -135,3 +135,16 @@ func QueryOrderStatusShopID(shopid int64,state int64)([]*modal.Order, error) {
 	}
 	return orders,nil
 }
+
+//QueryOrder 查询一份id
+func QueryOrderByID(id string) (*modal.Order, error) {
+	sql := "select totalcount,totalamount,state,createtime,shop.id,shopname from orders,shop where orders.userid == shop.userid and orders.id= ?"
+	row := Db.QueryRow(sql, id)
+	order := &modal.Order{}
+	order.Shop = &modal.Shop{}
+	err:= row.Scan(&order.TotalCount, &order.TotalAmout, &order.State, &order.CreateTime, &order.Shop.ID, &order.Shop.ShopName)
+	if err != nil{
+		return nil,err
+	}
+	return order,nil
+}

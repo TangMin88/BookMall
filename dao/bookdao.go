@@ -15,18 +15,18 @@ func AddBook(book *modal.Book) error {
 		fmt.Println(err)
 		return err
 	}
-	fmt.Println(sql)
 	return nil
 }
 
 //QueryBook 根据书的id查询一本书
 func QueryBook(bookid int64)(*modal.Book,error) {
-	sql:= "select book.id,title,author,price,sales,stock,imgpath,shopid,shopname from book,shop where book.shopid=shop.id and id = ?"
+	sql:= "select book.id,title,author,price,sales,stock,imgpath,shopid,shopname from book,shop where book.shopid=shop.id and book.id = ?"
 	row := Db.QueryRow(sql, bookid)
 	book := &modal.Book{}
 	book.Shop = &modal.Shop{}
 	err := row.Scan(&book.ID, &book.Title, &book.Author, &book.Price, &book.Sales, &book.Stock, &book.ImgPath,&book.Shop.ID, &book.Shop.ShopName)
 	if err != nil {
+		fmt.Println(err)
 		return nil,err
 	}
 	return book,nil
@@ -100,11 +100,61 @@ func TotalBook(pageNo int64) (*modal.Page,error){
 	return page,nil 
 }
 
+//TotalBookPrice 获取带分页的图书
+func TotalBookPrice(pageNo int64,pricemin float64,pricemax float64) (*modal.Page,error){
+	//获取图书的总记录数
+	sql := "select count(*) from book where price between ? and ?"
+	//接收总记录数
+	var totalRecord int64
+	row := Db.QueryRow(sql,pricemin,pricemax)
+	row.Scan(&totalRecord)
+	//设置每页显示的条数
+	var pageSize int64 = 4
+	//总页数
+	var totalPage int64
+	if totalRecord % pageSize == 0{
+		totalPage = totalRecord / pageSize
+	}else{
+		totalPage = totalRecord / pageSize + 1
+	}
+	//获取当前页的图书
+	sql2 := "select book.id,title,author,price,sales,stock,imgpath,shopid,shopname from book,shop where book.shopid=shop.id and price between ? and ? limit ?,?"
+	rows,err := Db.Query(sql2,pricemin,pricemax, (pageNo - 1)*pageSize, pageSize)
+	if err != nil{
+		fmt.Println(err)
+		return nil,err
+	}	
+	var books []*modal.Book
+	for rows.Next() {
+		book := &modal.Book{}
+		book.Shop = &modal.Shop{}
+		err1 := rows.Scan(&book.ID, &book.Title, &book.Author, &book.Price, &book.Sales, &book.Stock, &book.ImgPath, &book.Shop.ID, &book.Shop.ShopName)
+		if err1 != nil{
+			fmt.Println(err1)
+			return nil,err1
+		}
+		//将book放入books切片中
+		books = append(books,book)
+	}
+	//创建page
+	page:=  &modal.Page{	
+		BooK:		books, 	
+		PageNo:		pageNo,
+		PageSize:	pageSize,
+		TotalPage:	totalPage,
+		TotalRecord:totalRecord,
+		Pricemin:pricemin,
+		Pricemax:pricemax,
+	}
+	return page,nil 
+}
+
 //根据图书的id更新图书
 func UpdateBook(book *modal.Book) error {
-	sql := "update book set title=?, author=?, price=?, sales=?, stock=?, imgpath=? where id =?"
-	_,err := Db.Exec(sql, book.Title, book.Author, book.Price, book.Sales, book.Stock, book.ImgPath, book.ID)
+	sql := "update book set title=?, author=?, price=?, stock=?, imgpath=? where id =?"
+	_,err := Db.Exec(sql, book.Title, book.Author, book.Price, book.Stock, book.ImgPath, book.ID)
 	if err != nil {
+		fmt.Println(err)
 		return err
 	}
 	return nil
@@ -115,6 +165,7 @@ func DeleteBookid(bookid int64) error {
 	sql := "delete from book where id = ?"
 	_,err := Db.Exec(sql, bookid)
 	if err != nil{
+		fmt.Println(err)
 		return err
 	}
 	return nil
@@ -163,7 +214,6 @@ func ShopTotalBook(pageNo int64,shopid int64) (*modal.Page,error){
 		//将book放入books切片中
 		books = append(books,book)
 	}
-	shop,_ := QueryShopID(shopid)
 	//创建page
 	page:=  &modal.Page{	
 		BooK:		books, 	
@@ -171,16 +221,8 @@ func ShopTotalBook(pageNo int64,shopid int64) (*modal.Page,error){
 		PageSize:	pageSize,
 		TotalPage:	totalPage,
 		TotalRecord:totalRecord,
-		Shop:		shop,
 	}
 	return page,nil 
 }
-func Updatek(img string) error {
-	sql := "update book set imgpath=?"
-	_,err := Db.Exec(sql,img)
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
-	return nil
-}
+
+
