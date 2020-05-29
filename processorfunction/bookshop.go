@@ -107,15 +107,15 @@ func TheDelivery(w http.ResponseWriter, r *http.Request) {
 		//判断是否有店铺
 		shop,b := ShopCookie(session.UserID)
 		if b {
-			orderid := r.FormValue("orderid")
-			state := r.FormValue("state")
-			if orderid !=""&& state =="1"{
+			orderid := r.FormValue("orderid")			
+			if orderid !=""{
 				//查询订单id是否属于登录的店铺
 				order,_ :=dao.QueryOrderByID(orderid)
 				if order != nil && order.Shop.ID ==shop.ID {
-					istate,_ := strconv.ParseInt(state,10,64)
+					var state int64					
+				        state =1
 					//更新订单状态
-					dao.UpdateTheOrderState(orderid,istate)
+					dao.UpdateTheOrderState(orderid,state)
 				}
 			}		
 			//返回我的订单页面
