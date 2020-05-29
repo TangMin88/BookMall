@@ -56,7 +56,7 @@
                         <td width="100">{{.TotalAmout}}</td>                   
                         <td width="100"><a class="but1" href="/checkthedetails?orderid={{.OrderID}}&s=shop">查看详情</a></td>
                         {{if .NoSend}}
-                        <td width="100"><a class="but2" href="/thedelivery?orderid={{.OrderID}}&state=1">发货</a></td>                      
+                        <td width="100"><a class="but2" href="/thedelivery?orderid={{.OrderID}}">发货</a></td>                      
                         {{end}}
                         {{if .SendComplate}}
                         <td width="100">等待收货</td>                       
